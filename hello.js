@@ -1,1 +1,1 @@
-console.log('hello vue');
+console.log('hello vue3-webpack5');
