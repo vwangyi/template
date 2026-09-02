@@ -1,4 +1,4 @@
-<script setup lang="ts"></script>
+<script setup ></script>
 
 <template>
   <div>低代码</div>

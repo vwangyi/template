@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 console.log(123);
 </script>
 

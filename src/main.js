@@ -1,5 +1,5 @@
-import { createApp, type App as VueApp } from 'vue';
-import { createPinia, type Pinia } from 'pinia';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import persistentState from 'pinia-plugin-persistedstate';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
@@ -11,15 +11,15 @@ import '@/styles/index.scss';
 import '@/assets/iconfont/iconfont.css';
 import '@/router/permission';
 
-import VxeUITable from 'vxe-table';
-import 'vxe-table/es/style.css';
+// import VxeUITable from 'vxe-table';
+// import 'vxe-table/es/style.css';
 
 // import '@/utils/check-update';
-const pinia: Pinia = createPinia();
+const pinia = createPinia();
 pinia.use(persistentState);
-const app: VueApp = createApp(App);
+const app = createApp(App);
 app.component('vue-echarts', echarts);
-app.use(VxeUITable);
+// app.use(VxeUITable);
 app.use(Antd);
 app.use(pinia);
 app.use(router);

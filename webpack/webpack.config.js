@@ -5,7 +5,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //  将 CSS 从 JavaScript 中提取出来，生成独立的 .css 文件
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin'); // 压缩css
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const cpu = os.cpus().length - 1;
 const rootPath = process.cwd(); // 项目根路径 启动命令的路径
@@ -25,31 +25,31 @@ clearDist();
  * webpack 基础配置
  */
 module.exports = {
-  entry: './src/main.ts',
+  entry: './src/main.js',
   module: {
     rules: [
-      {
-        test: /\.(ts|tsx)$/,
-        use: [
-          {
-            loader: 'babel-loader'
-          },
-          {
-            loader: 'ts-loader',
-            options: {
-              // transpileOnly: true 表示 让 ts-loader 只处理编译，不进行类型检查 提高编译速度
-              // 类型检查交给 ForkTsCheckerWebpackPlugin
-              transpileOnly: true,
-              // 支持 .vue 文件中的 TypeScript/TSX
-              appendTsSuffixTo: [/\.vue$/],
-              appendTsxSuffixTo: [/\.vue$/],
-              // 配置项
-              configFile: path.resolve(rootPath, 'tsconfig.json')
-            }
-          }
-        ],
-        exclude: /node_modules/
-      },
+      // {
+      //   test: /\.(ts|tsx)$/,
+      //   use: [
+      //     {
+      //       loader: 'babel-loader'
+      //     },
+      //     {
+      //       loader: 'ts-loader',
+      //       options: {
+      //         // transpileOnly: true 表示 让 ts-loader 只处理编译，不进行类型检查 提高编译速度
+      //         // 类型检查交给 ForkTsCheckerWebpackPlugin
+      //         transpileOnly: true,
+      //         // 支持 .vue 文件中的 TypeScript/TSX
+      //         appendTsSuffixTo: [/\.vue$/],
+      //         appendTsxSuffixTo: [/\.vue$/],
+      //         // 配置项
+      //         configFile: path.resolve(rootPath, 'tsconfig.json')
+      //       }
+      //     }
+      //   ],
+      //   exclude: /node_modules/
+      // },
       {
         test: /\.vue$/,
         use: {
@@ -122,8 +122,8 @@ module.exports = {
   resolve: {
     // 这里配置了后缀 import 导入文件时 不用写后缀
     extensions: [
-      '.ts',
-      '.tsx',
+      // '.ts',
+      // '.tsx',
       '.js',
       '.vue',
       '.jsx',
@@ -146,12 +146,12 @@ module.exports = {
     //   // 生成报告后是否自动在浏览器中打开
     //   openAnalyzer: true,
     // }),
-    new ForkTsCheckerWebpackPlugin({
-      typescript: {
-        configFile: path.resolve(rootPath, 'tsconfig.json')
-      },
-      async: process.env.NODE_ENV === 'development'
-    }),
+    // new ForkTsCheckerWebpackPlugin({
+    //   typescript: {
+    //     configFile: path.resolve(rootPath, 'tsconfig.json')
+    //   },
+    //   async: process.env.NODE_ENV === 'development'
+    // }),
     new MiniCssExtractPlugin({
       filename: 'css/[name]_[contenthash:8].css'
     }),

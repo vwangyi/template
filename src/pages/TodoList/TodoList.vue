@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import TodoList from '@/components/TodoList/TodoList.vue';
 import { useTodoStore } from '@/stores/todo';
 import { ref, computed, onMounted } from 'vue';

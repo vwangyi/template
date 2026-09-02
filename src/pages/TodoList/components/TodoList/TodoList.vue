@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { computed, onMounted, ref } from 'vue';
 
 const inputTask = ref('');

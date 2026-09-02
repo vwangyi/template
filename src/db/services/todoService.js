@@ -7,17 +7,16 @@ import { v4 as uuidv4 } from 'uuid';
  * 站在indexedDB的角度 封装 增删改查 CURD  给Store调用  store给页面调用
  */
 
-export async function getAllByStatus(status: string): Promise<TodoItem[]> {
+export async function getAllByStatus(status) {
   return db.todos.where('status').equals(status).toArray();
 }
 
-export async function getById(id: string): Promise<TodoItem | undefined> {
+export async function getById(id) {
   return db.todos.get(id);
 }
 
 export async function add(
-  item: Omit<TodoItem, 'id' | 'createdAt'>
-): Promise<string> {
+  item) {
   const id = uuidv4();
   await db.todos.add({
     ...item,
@@ -28,20 +27,20 @@ export async function add(
 }
 
 export async function update(
-  id: string,
-  changes: Partial<TodoItem>
-): Promise<number> {
+  id,
+  changes
+) {
   return db.todos.update(id, changes);
 }
 
-export async function remove(id: string): Promise<void> {
+export async function remove(id) {
   await db.todos.delete(id);
 }
 
-export async function bulkCreate(items: TodoItem[]): Promise<void> {
+export async function bulkCreate(items) {
   await db.todos.bulkAdd(items);
 }
 
-export async function clearCompleted(): Promise<void> {
+export async function clearCompleted() {
   await db.todos.where('status').equals('completed').delete();
 }

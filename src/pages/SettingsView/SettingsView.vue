@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { onBeforeUnmount, ref, type Ref } from 'vue';
 import { onMounted } from 'vue';
 

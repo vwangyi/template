@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { ref, onMounted, onBeforeUnmount, useTemplateRef } from 'vue';
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 import 'bpmn-js/dist/assets/diagram-js.css';
@@ -15,7 +15,7 @@ const container = useTemplateRef('container');
 
 onMounted(async () => {
   const modeler = new BpmnModeler({
-    container: container.value as HTMLDivElement
+    container: container.value 
   });
   await modeler.importXML(bpmnXML);
 });

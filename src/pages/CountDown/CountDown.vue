@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import CountDown from '@/components/CountDown/CountDown';
 </script>
 

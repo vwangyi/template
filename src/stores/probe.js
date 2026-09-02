@@ -9,7 +9,7 @@ export const useProbeStore = defineStore('probe', () => {
 
   const pageId = ref(''); // view object 简称 VO
 
-  function setPggeId(value: string) {
+  function setPggeId(value) {
     pageId.value = value;
   }
 

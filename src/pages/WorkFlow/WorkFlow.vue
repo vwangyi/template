@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 // import BpmnJS from 'bpmn-js/lib/Modeler';
 
 // const xml = '...'; // my BPMN 2.0 xml

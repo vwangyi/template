@@ -1,12 +1,12 @@
-<script setup lang="ts">
+<script setup >
 import { ref } from 'vue';
-import { useRoute, useRouter, type RouteRecordRaw } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { routes } from '@/router/index';
 const route = useRoute();
 const router = useRouter();
 const list = ref([]);
 
-function handleClickBtn(item: RouteRecordRaw) {
+function handleClickBtn(item) {
   router.push(item.path);
 }
 </script>

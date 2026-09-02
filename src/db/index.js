@@ -1,9 +1,6 @@
-import { Dexie, type EntityTable } from 'dexie';
-import type { Friend } from './models/todo.ts';
+import { Dexie } from 'dexie';
 
-const db = new Dexie('FriendsDatabase') as Dexie & {
-  friends: EntityTable<Friend, 'id'>;
-};
+const db = new Dexie('FriendsDatabase') 
 
 db.version(1).stores({
   friends: '++id, name, age' // primary key "id" (for the runtime!)
