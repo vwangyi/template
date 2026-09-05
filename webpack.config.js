@@ -3,5 +3,5 @@
  */
 
 export default {
-    entry: './src/index.js', 
+    // entry: './src/index.js', 
 }
