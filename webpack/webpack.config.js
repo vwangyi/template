@@ -250,7 +250,7 @@ module.exports = {
      * 根据经验 配置webpack 把js代码打包出3种类型
      * 1. vendor: 第三方库node_modules   [基本不会改动 除非依赖版本升级]
      * 2. common: 业务组件代码的公共部分抽取出来 [改动较少]
-     * 3. entry.{page}: 不用页面 entry 里的业务组件代码的差异部分 [经常改动]
+     * 3. entry.{page}: 不用页面 entry 里的业务组件代码的差异部分 [经常改动]  
      */
     splitChunks: {
       // chunks: 'async', 表示 import() 异步引入

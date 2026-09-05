@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import persistentState from 'pinia-plugin-persistedstate';
 // antd 已改为按需引入（见 webpack.config.js 的 unplugin-vue-components）
 // 模板里直接写 <a-button> 等即可，message 等 JS API 需显式 import
+import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 // echarts 已移出主包：需要图表时在页面里局部引入 @/utils/echarts
 import router from './router';
@@ -19,6 +20,7 @@ const pinia = createPinia();
 pinia.use(persistentState);
 const app = createApp(App);
 // app.use(VxeUITable);
+app.use(Antd);
 app.use(pinia);
 app.use(router);
 app.mount('#app');
