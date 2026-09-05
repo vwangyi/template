@@ -7,6 +7,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //  将 CSS 从
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin'); // 压缩css
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
+const Components = require('unplugin-vue-components/webpack'); // antd 按需引入 安装: pnpm add -D unplugin-vue-components
+const { AntDesignVueResolver } = require('unplugin-vue-components/resolvers');
 const cpu = os.cpus().length - 1;
 const rootPath = process.cwd(); // 项目根路径 启动命令的路径
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -120,6 +122,10 @@ module.exports = {
   },
   // 配置模块解析的具体行为 方便开发便捷性
   resolve: {
+    // 配置路径别名 映射 import xx from '$pages/xx/xx';
+    alias: {
+      '@': path.resolve(rootPath, './src')
+    },
     // 这里配置了后缀 import 导入文件时 不用写后缀
     extensions: [
       // '.ts',
@@ -131,21 +137,17 @@ module.exports = {
       '.less',
       '.css'
     ],
-    // 配置路径别名 映射 import xx from '$pages/xx/xx';
-    alias: {
-      '@': path.resolve(rootPath, './src')
-    }
   },
   // 配置webpack插件  可以自己封装自己的webpack插件（class）
   plugins: [
-    //   new BundleAnalyzerPlugin({
-    //   // 生成一个静态的 HTML 报告文件，而不是启动一个服务器
-    //   analyzerMode: 'static',
-    //   // 报告文件的名称
-    //   reportFilename: 'bundle-report.html',
-    //   // 生成报告后是否自动在浏览器中打开
-    //   openAnalyzer: true,
-    // }),
+      false ? new BundleAnalyzerPlugin({
+      // 生成一个静态的 HTML 报告文件，而不是启动一个服务器
+      analyzerMode: 'static',
+      // 报告文件的名称
+      reportFilename: 'bundle-report.html',
+      // 生成报告后是否自动在浏览器中打开
+      openAnalyzer: true,
+    }) : null,
     // new ForkTsCheckerWebpackPlugin({
     //   typescript: {
     //     configFile: path.resolve(rootPath, 'tsconfig.json')
@@ -161,14 +163,23 @@ module.exports = {
      */
     new VueLoaderPlugin(),
     /**
-     * 把第三方库暴露到 window 下
-     * 比如说 vue 配置之后 可以 window.Vue 访问
+     * antd 按需引入（unplugin-vue-components）
+     * 模板里直接写 <a-button> <a-table> 等 会自动转成按需 import
+     * 注意：message / Modal / notification 这类 JS API 仍需手动
+     *   import { message } from 'ant-design-vue'
+     * antd v4 用 CSS-in-JS，无需引入样式文件，所以 importStyle: false
      */
-    new webpack.ProvidePlugin({
-      Vue: 'vue',
-      axios: 'axios',
-      lodash: 'lodash'
+    Components({ // 注意：v32 的 webpack 导出是工厂函数，不能 new
+      resolvers: [AntDesignVueResolver({ importStyle: false })],
+      dts: false // 纯 JS 项目不生成 components.d.ts
     }),
+    /**
+     * ProvidePlugin 全局注入已移除
+     * 原来会把完整的 vue / axios / lodash 注入为全局变量，
+     * 导致 lodash-es 全量（~400KB 源码）被打进 vendor
+     * 现在一律显式 import，lodash 按路径引入：
+     *   import { omit } from 'lodash-es'
+     */
     /**
      * webpack.DefinePlugin  是用来定义 全局变量的
      * 通过 window.__VUE_OPTIONS_API__访问
@@ -219,7 +230,7 @@ module.exports = {
         removeRedundantAttributes: true, // 移除冗余属性
         removeScriptTypeAttributes: true, // 移除 script 的 type 属性
         removeStyleLinkTypeAttributes: true, // 移除 style/link 的 type 属性
-        useShortDoctype: true, // 使用短 doctype
+        // useShortDoctype: true, // 使用短 doctype
         minifyCSS: true, // 压缩 CSS
         minifyJS: true, // 压缩 JS
         minifyURLs: true, // 压缩 URL
@@ -227,7 +238,7 @@ module.exports = {
         keepClosingSlash: true // 保留自闭合标签的斜杠
       }
     })
-  ],
+  ].filter(Boolean),
   /**
    * 配置打包输出优化 （配置代码分割 模块合并 缓存 TreeShaking 代码压缩等优化策略）
    */
@@ -261,6 +272,35 @@ module.exports = {
           test: /[\\/]node_modules[\\/](@wangeditor|wangeditor)/, // 正则匹配包名
           priority: 50, // 【非常重要】优先级必须比 vendor 高！
           // enforce: true,   // 强制生效，即使体积很小也单独打包
+          reuseExistingChunk: true, // 允许复用
+          filename: 'js/[name]_[chunkhash:8].bundle.js' // 打包后的文件名会包含这个名字
+        },
+
+          'echarts': { 
+          chunks: 'all',
+          name: 'echarts',  
+          test: /[\\/]node_modules[\\/](echarts|@echarts)/, // 正则匹配包名
+          priority: 50, // 【非常重要】优先级必须比 vendor 高！
+          enforce: true,   // 强制生效，即使体积很小也单独打包
+          reuseExistingChunk: true, // 允许复用
+          filename: 'js/[name]_[chunkhash:8].bundle.js' // 打包后的文件名会包含这个名字
+        },
+
+        'ant-design-vue': { 
+          chunks: 'all',
+          name: 'ant-design-vue',  
+          test: /[\\/]node_modules[\\/](ant-design-vue|@ant-design-vue)/, // 正则匹配包名
+          priority: 50, // 【非常重要】优先级必须比 vendor 高！
+          enforce: true,   // 强制生效，即使体积很小也单独打包
+          reuseExistingChunk: true, // 允许复用
+          filename: 'js/[name]_[chunkhash:8].bundle.js' // 打包后的文件名会包含这个名字
+        },
+        'vue': { 
+          chunks: 'all',
+          name: 'vue',  
+          test: /[\\/]node_modules[\\/](vue|@vue)/, // 正则匹配包名
+          priority: 50, // 【非常重要】优先级必须比 vendor 高！
+          enforce: true,   // 强制生效，即使体积很小也单独打包
           reuseExistingChunk: true, // 允许复用
           filename: 'js/[name]_[chunkhash:8].bundle.js' // 打包后的文件名会包含这个名字
         },
@@ -304,12 +344,9 @@ module.exports = {
       // 压缩js
       new TerserWebpackPlugin({
         test: /\.js(\?.*)?$/i, // 匹配需要压缩的文件
-        include: /\/src/, // 要包含的文件夹
-        exclude: /\/node_modules/, // 要排除的文件夹
-        exclude: [
-          /\/node_modules\/lodash/, // 不压缩 lodash
-          /\/src\/legacy\// // 不压缩 legacy 目录
-        ],
+        // 注意：不要设置 include/exclude！
+        // 之前 include: /\/src/ + exclude: /node_modules/ 会导致
+        // echarts / ant-design-vue / vendor 等大 chunk 完全不被压缩（实测 8.6MB -> 2.6MB）
 
         // cache: true, // 使用缓存 加速构建过程  webpack5 已经移除了 会报错
         // 多进程并行压缩
@@ -354,5 +391,6 @@ module.exports = {
         }
       })
     ]
-  }
+  },
+  ignoreWarnings: [/export '(contentQuotesLinter|hashedAnimationLinter)'/]
 };

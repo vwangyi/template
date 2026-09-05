@@ -51,6 +51,7 @@
     "terser-webpack-plugin": "^5.4.0",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
+    "unplugin-vue-components": "^32.1.0",
     "url-loader": "^4.1.1",
     "validate-commit-msg": "^2.14.0",
     "vite": "^8.0.10",
