@@ -2,28 +2,16 @@
   "name": "webpack5",
   "version": "1.0.0",
   "description": "",
-  "main": "hello.js",
-  "script": {
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
     "dev": "webpack --mode development --watch",
-    "build": "webpack --mode production"
-  },
-  "dependencies": { 
+    "build": "webpack --mode production",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
     "webpack": "^5.110.2",
     "webpack-cli": "^7.2.3"
-  },
-  "scripts": {
-    "test": "mocha"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vwangyi/template.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/vwangyi/template/issues"
-  },
-  "homepage": "https://github.com/vwangyi/template#readme"
+  }
 }
