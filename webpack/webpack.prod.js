@@ -10,6 +10,7 @@ const webpackConfig = merge(baseConfig, {
   mode: 'production', // 指定为 生产环境
   devtool: 'source-map',
   output: {
+    clean: true,
     filename: 'js/[name]_[chunkhash:8].bundle.js',
     path: path.resolve(rootPath, './dist/'), // 输出文件路径
     globalObject: 'this', // globalObject指向this

@@ -27,7 +27,7 @@ clearDist();
  * webpack 基础配置
  */
 module.exports = {
-  entry: './src/main.js',
+  entry: './src/main.js', 
   module: {
     rules: [
       // {
