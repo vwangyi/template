@@ -1,11 +1,9 @@
-/**
- * 
- */
+
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import path from 'path';
+import path from 'node:path';
 
+const __dirname = import.meta.dirname;
 
-console.log('path ', path.resolve(__dirname, './'))
 export default {
     entry: './src/index.js', 
     output: {
@@ -14,7 +12,7 @@ export default {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, './')
+            template: path.resolve(__dirname, './public/template.html')
         })
     ]
 }
