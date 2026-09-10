@@ -5,8 +5,7 @@
   "main": "main.js",
   "type": "commonjs",
   "scripts": {
-    "dev": "npx webpack serve",
-    "de1v": "npx webpack serve --config ./webpack/webpack.dev.js",
+    "dev": "npx webpack serve --config ./webpack.config.js", 
     "build": "webpack --mode production",
     "prepare": "husky"
   },
