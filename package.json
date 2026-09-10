@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "npx webpack serve",
     "de1v": "npx webpack serve --config ./webpack/webpack.dev.js",
