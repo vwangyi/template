@@ -1,15 +1,11 @@
 const path = require('node:path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const cwd = process.cwd();
 module.exports = {
-    mode: 'development',
-    entry: './src/index.js', 
+    mode: 'production',
+    entry: './src/index.js',
     output: {
+        path: path.resolve(cwd, 'dist'),
         clean: true,
-        filename: 'main.js'
-    },
-    devServer: {
-        port: 1234,
-    },
-    plugins: [new HtmlWebpackPlugin()]
+        filename: "js/bundle_[name]_[contenthash:8].js", 
+    }
 }
