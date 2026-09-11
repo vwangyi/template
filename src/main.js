@@ -12,6 +12,9 @@ import '@/styles/index.scss';
 import '@/assets/iconfont/iconfont.css';
 import '@/router/permission';
 
+import './pages/HomeView/text1.js'
+import './pages/HomeView/text2.js'
+
 // import VxeUITable from 'vxe-table';
 // import 'vxe-table/es/style.css';
 

@@ -155,7 +155,8 @@ module.exports = {
     //   async: process.env.NODE_ENV === 'development'
     // }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name]_[contenthash:8].css'
+      filename: 'css/[name]_[contenthash:8].css',
+      chunkFilename: 'common_[hash:5].css'
     }),
     /**
      * 将 /\.js$/ 中的规则 应用到 .vue文件中的 <script> 模块里
@@ -303,7 +304,7 @@ module.exports = {
           enforce: true,   // 强制生效，即使体积很小也单独打包
           reuseExistingChunk: true, // 允许复用
           filename: 'js/[name]_[chunkhash:8].bundle.js' // 打包后的文件名会包含这个名字
-        },
+        }, 
 
         // 第三方依赖库
         vendors: {
@@ -330,8 +331,18 @@ module.exports = {
           priority: 5, // 优先级 数字越大 优先级越高 比 第三方依赖库 优先级高
           reuseExistingChunk: true, // 复用已有的公共 chunk
           enforce: true // 强制拆分（如果前面条件都满足但依旧不生效，可尝试）
-        }
+        },
         // xx: {}
+        'common-css': {
+        name: 'common-css',
+        test: /\.css$/,
+        minChunks: 1,        // 被 2 个及以上 chunk 引用才提取
+        minSize: 0,          // 不限制最小体积
+        priority: 100,
+        enforce: true,       // 强制提取
+        reuseExistingChunk: true
+        // ❌ 不要写 filename，写了也无效
+      }
       }
     },
     // 将 webpack运行时 生成的代码 单独打包到 runtime.js 比如： runtime~entry.dashboard_9183948e.bundle.js

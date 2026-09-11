@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { routes } from '@/router/index';
+
 const route = useRoute();
 const router = useRouter();
 const list = ref([]);
