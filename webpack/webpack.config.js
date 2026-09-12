@@ -155,7 +155,7 @@ module.exports = {
     //   async: process.env.NODE_ENV === 'development'
     // }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name]_[contenthash:8].css',
+      filename: 'css/[name]_[contenthash:6].css',
       chunkFilename: 'common_[hash:5].css'
     }),
     /**
@@ -223,22 +223,23 @@ module.exports = {
       // 产物 最终模版 输出路径
       // filename: path.resolve(rootPath, './dist/', `index.html`),
       filename: 'index.html', // ✅ 改为相对路径，不要用绝对路径
-      // 要注入的代码块  <script src="xxx" ></script>
-      // chunks: [entryName], // entryPage1和入口的key 一样
-      minify: {
-        // collapseWhitespace: true, // 折叠空白
+      inject: false, // inject: false + <%= htmlWebpackPlugin.tags.headTags.join('\n    ') %>
+      minify: true ? {
         removeComments: true, // 移除注释
+        collapseBooleanAttributes: true, // 让 defer="defer" 变成 defer
+        collapseWhitespace: true, // 折叠空白
+        collapseInlineTagWhitespace: true,
         removeRedundantAttributes: true, // 移除冗余属性
         removeScriptTypeAttributes: true, // 移除 script 的 type 属性
         removeStyleLinkTypeAttributes: true, // 移除 style/link 的 type 属性
-        // useShortDoctype: true, // 使用短 doctype
+        conservativeCollapse: true,
         minifyCSS: true, // 压缩 CSS
         minifyJS: true, // 压缩 JS
         minifyURLs: true, // 压缩 URL
         removeEmptyAttributes: true, // 移除空属性
         keepClosingSlash: true // 保留自闭合标签的斜杠
-      }
-    })
+      } : false,
+    }),  
   ].filter(Boolean),
   /**
    * 配置打包输出优化 （配置代码分割 模块合并 缓存 TreeShaking 代码压缩等优化策略）
@@ -274,7 +275,7 @@ module.exports = {
           priority: 50, // 【非常重要】优先级必须比 vendor 高！
           // enforce: true,   // 强制生效，即使体积很小也单独打包
           reuseExistingChunk: true, // 允许复用
-          filename: 'js/[name]_[chunkhash:8].bundle.js' // 打包后的文件名会包含这个名字
+          filename: 'js/[name]_[contenthash:6].js' // 打包后的文件名会包含这个名字
         },
 
           'echarts': { 
@@ -284,7 +285,7 @@ module.exports = {
           priority: 50, // 【非常重要】优先级必须比 vendor 高！
           enforce: true,   // 强制生效，即使体积很小也单独打包
           reuseExistingChunk: true, // 允许复用
-          filename: 'js/[name]_[chunkhash:8].bundle.js' // 打包后的文件名会包含这个名字
+          filename: 'js/[name]_[contenthash:6].js' // 打包后的文件名会包含这个名字
         },
 
         'ant-design-vue': { 
@@ -294,7 +295,7 @@ module.exports = {
           priority: 50, // 【非常重要】优先级必须比 vendor 高！
           enforce: true,   // 强制生效，即使体积很小也单独打包
           reuseExistingChunk: true, // 允许复用
-          filename: 'js/[name]_[chunkhash:8].bundle.js' // 打包后的文件名会包含这个名字
+          filename: 'js/[name]_[contenthash:6].js' // 打包后的文件名会包含这个名字
         },
         'vue': { 
           chunks: 'all',
@@ -303,7 +304,7 @@ module.exports = {
           priority: 50, // 【非常重要】优先级必须比 vendor 高！
           enforce: true,   // 强制生效，即使体积很小也单独打包
           reuseExistingChunk: true, // 允许复用
-          filename: 'js/[name]_[chunkhash:8].bundle.js' // 打包后的文件名会包含这个名字
+          filename: 'js/[name]_[contenthash:6].js' // 打包后的文件名会包含这个名字
         }, 
 
         // 第三方依赖库
@@ -316,7 +317,7 @@ module.exports = {
           // enforce: true, // 为true 强制执行 表示 忽略 import的分割
           // enforce: false, // 为false，允许其他规则介入
           reuseExistingChunk: true // 复用已有的公共 chunk
-          // filename: '[name].bundle.js', // 会多生成一个js 不知道什么意思
+          // filename: '[name].js', // 会多生成一个js 不知道什么意思
         },
         /**
          * 公共模块
@@ -345,11 +346,12 @@ module.exports = {
       }
       }
     },
-    // 将 webpack运行时 生成的代码 单独打包到 runtime.js 比如： runtime~entry.dashboard_9183948e.bundle.js
+    // 将 webpack运行时 生成的代码 单独打包到 runtime.js 比如： runtime~entry.dashboard_9183948e.js
     // runtimeChunk: true,
     runtimeChunk: {
       name: entrypoint => `runtime_${entrypoint.name}` // 指定输出到 runtime 文件夹
     },
+    minimize: true,
     minimizer: [
       new CssMinimizerWebpackPlugin(), // 压缩css
       // 压缩js
@@ -370,12 +372,8 @@ module.exports = {
         // 或者自定义注释提取
         extractComments: {
           condition: /^\**!|@preserve|@license|@cc_on/i,
-          filename: fileData => {
-            return `${fileData.filename}.LICENSE.txt`;
-          },
-          banner: licenseFile => {
-            return `License information can be found in ${licenseFile}`;
-          }
+          filename: ({basename}) => `license/${basename}.LICENSE.txt`,
+          banner: path => `License information can be found in ${path}`
         },
         // Terser 压缩选项
         terserOptions: {
