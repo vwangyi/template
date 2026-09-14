@@ -401,5 +401,9 @@ module.exports = {
       })
     ]
   },
-  ignoreWarnings: [/export '(contentQuotesLinter|hashedAnimationLinter)'/]
+  ignoreWarnings: [/export '(contentQuotesLinter|hashedAnimationLinter)'/],
+  stats: 'errors-only',
+  infrastructureLogging: {
+    level: 'none',  // 或 'none'，只保留错误日志
+  }, 
 };
