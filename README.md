@@ -6,7 +6,7 @@
 
 - 🔭 目前专注于 **全栈开发** 与 **AI 应用** 的结合
 - 🌱 正在深入学习大模型应用开发：LangChain / RAG / Agent
-- 💬 熟悉 **React / Vue / Node.js / Python**，欢迎技术交流
+- 💬 熟悉 **React / Vue / Nodejs / Python**，欢迎技术交流
 - 👯 希望与志同道合的朋友一起做点有趣的开源项目
 - ⚡ 信念：*Talk is cheap. Show me the code.*
 
